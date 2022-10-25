@@ -1,6 +1,6 @@
 Calvin Unix Playbook.
 
-$~ sudo apt update && $~ sudo apt full-upgrade -yy
+$~ sudo apt update `&&` $~ sudo apt full-upgrade -yy
 $~ sudo apt install kali-tweaks
 $~ sudo apt install kali-win-kex
 $~ sudo apt install veil
