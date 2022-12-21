@@ -1,12 +1,7 @@
 #!/bin/bash
-# Refs:
-# http://stackoverflow.com/questions/11617210/how-to-properly-import-a-selfsigned-certificate-into-java-keystore-that-is-avail
-# https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-14-04
-# http://www.advancedpentest.com/help-malleable-c2
-# https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
+# Refs: guy who updated the OG httpsc2doneright.sh.
+#       I am making this for more than just CS server. However, it works beautifully at that too.
 
-# This script was originally written by Alex, but certbot changed and the public script didn't work anymore
-# I updated this script to work again, hope it helps
 
 # Global Variables
 runuser=$(whoami)
@@ -14,11 +9,11 @@ tempdir=$(pwd)
 # Echo Title
 clear
 echo '=========================================================================='
-echo ' HTTPS C2 Done Right Setup Script | [Updated]: 2022 by @ChrisTruncer'
+echo ' HTTPS SSL Done Right Setup Script | [Deviation]: 2022 by @Dreadytofat'
 echo '=========================================================================='
 echo ' Originally Written by Alex Rymdeko-Harvey | [Twitter]: @KillSwitch-GUI'
 echo '=========================================================================='
-echo ' [Web]: Https://www.fortynorthsecurity.com | [Twitter]: @FortyNorthSec'
+echo ' [Web]: Https://.com | [] : @ '
 echo '=========================================================================='
 
 
@@ -30,7 +25,7 @@ echo -n "Enter your common password to be used [ENTER]: "
 read password
 echo
 
-echo -n "Enter your CobaltStrike server location [ENTER]: "
+echo -n "Enter your server IP [ENTER]: "
 read cobaltStrike
 echo
 
@@ -159,7 +154,9 @@ func_build_pkcs(){
   cp $domainStore $cobaltStrikeProfilePath
   echo '[Success] Moved Java keystore to CS profile Folder.'
 }
-
+# Private repo does include malleable C2 testing.
+# Commented out as use case in Public Repo is not for CS.
+:" 
 func_build_c2(){
   cd $cobaltStrikeProfilePath
   echo '[Starting] Cloning into amazon.profile for testing.'
@@ -172,7 +169,12 @@ func_build_c2(){
   echo   set password \"$password\"\; >> amazon.profile
   echo '}' >> amazon.profile
   echo '[Success] amazon.profile updated with HTTPs settings.'
-}
+"
+# Skipping build_c2 tests & exiting.
+func_build_d12(){
+  echo '[Success] C2 Test Skipped as script version is for Normies.'
+  echo '[Success] Reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.'
+  
 # Menu Case Statement
 case $1 in
   *)
@@ -181,6 +183,6 @@ case $1 in
   func_apache_check
   func_install_letsencrypt
   func_build_pkcs
-  func_build_c2
+  func_build_d12
   ;;
 esac
